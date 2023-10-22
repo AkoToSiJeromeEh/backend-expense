@@ -9,7 +9,12 @@ const cors = require('cors')
 
 
 connectDb()
-server.use(cors())
+server.use(
+    cors({
+
+    origin : [ 'http://localhost:3000', 'https://expensetracker-ymu3.onrender.com/']
+})
+)
 server.use(express.json()) //passer - to be able to receive the data from the client into the server
 
 
