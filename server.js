@@ -12,7 +12,7 @@ connectDb()
 server.use(
     cors({
 
-    origin : [  'https://expensetracker.onrender.com']
+    origin : [  'https://expensetracker-36xy.onrender.com']
 })
 )
 server.use(express.json()) //passer - to be able to receive the data from the client into the server
