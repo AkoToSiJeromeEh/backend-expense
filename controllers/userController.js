@@ -52,7 +52,13 @@ const loginUser = asyncHandler(async(req, res)=>{
 
     //compare password with hashedPassword
     if(user && (await bcrypt.compare(password, user.password))){
-        res.status(200).json({message: 'Pwet'})
+        const accessToken = jwt.sign({
+            user: {
+                username: user.username,
+                id: user.id
+            }
+        }, process.env.ACCESS_TOKEN_SECRET, {expiresIn: "30d"})
+        res.status(200).json({accessToken})
     }else{
         res.status(401)
         throw new Error("Username or password is not valid")

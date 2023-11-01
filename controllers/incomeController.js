@@ -5,7 +5,7 @@ const Income = require('../model/incomeModel')
 //@route GET /api/incomes
 //@access private
 const getIncome = asyncHandler(async(req, res)=>{
-    const reminder = await Income.find()
+    const reminder = await Income.find({user_id: req.user.id})
     res.status(200).json(reminder)
 })
 
@@ -24,6 +24,7 @@ const createIncome = asyncHandler(async(req, res)=>{
 
     const userIncome = await Income.create({
         income,
+        user_id: req.user.id
     })
     res.status(201).json({userIncome})
 })
@@ -38,6 +39,11 @@ const updateIncome = asyncHandler(async(req, res)=>{
     if(!income){
         res.status(404)
         throw new Error("Reminder not found")
+    }
+
+    if(income.user_id.toString() !==  req.user.id){
+        res.status(403)
+        throw new Error("User don't have permission to update other user income")
     }
 
     const updatedIncome = await Income.findByIdAndUpdate(

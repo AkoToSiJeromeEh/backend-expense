@@ -1,6 +1,11 @@
 const mongoose = require('mongoose');
 
 const expenseSchema = mongoose.Schema({
+    user_id:{
+        type: mongoose.Schema.Types.ObjectId,
+        required: true,
+        ref: "User"
+    },
     expense: {
         type: Number,
         required: [true, 'Add the amount for expense']

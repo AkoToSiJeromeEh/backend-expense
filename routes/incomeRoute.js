@@ -5,9 +5,9 @@ const {
     createIncome,
     updateIncome
 } = require('../controllers/incomeController')
+const validateToken = require('../middleware/verifyTokenHandler')
 
-
-
+router.use(validateToken)
 
 // get all income
 router.route('/').get(getIncome)

@@ -5,7 +5,7 @@ const Reminder = require('../model/reminderModel')
 //@route GET /api/reminders
 //@access public
 const getReminders = asyncHandler(async(req, res)=>{
-    const reminder = await Reminder.find()
+    const reminder = await Reminder.find({user_id: req.user.id})
     res.status(200).json(reminder)
 })
 
@@ -28,6 +28,7 @@ const createReminder = asyncHandler(async(req, res)=>{
         price,
         date,
         content,
+        user_id: req.user.id
     })
     res.status(201).json({reminder})
 })
@@ -76,6 +77,11 @@ const deleteReminder = asyncHandler(async(req, res)=>{
     if(!reminder){
         res.status(404)
         throw new Error("Reminder not found")
+    }
+
+    if(reminder.user_id.toString() !==  req.user.id){
+        res.status(403)
+        throw new Error("User don't have permission to update other user reminder")
     }
 
     await Reminder.deleteOne({_id: req.params.id})
